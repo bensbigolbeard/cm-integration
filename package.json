@@ -1,0 +1,26 @@
+{
+  "name": "cm-integration",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "dev": "tsup src/** --watch",
+    "build": "tsup src/**",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@types/isomorphic-fetch": "^0.0.36",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.10.2",
+    "isomorphic-fetch": "^3.0.0",
+    "puppeteer": "^19.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.13",
+    "esbuild": "^0.16.4",
+    "nodemon": "^2.0.20",
+    "tsup": "^6.6.3",
+    "typescript": "^4.9.3"
+  }
+}

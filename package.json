@@ -13,6 +13,7 @@
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",
+    "froebel": "^0.23.2",
     "isomorphic-fetch": "^3.0.0",
     "puppeteer": "^19.5.2"
   },

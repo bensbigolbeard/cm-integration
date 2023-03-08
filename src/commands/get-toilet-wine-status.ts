@@ -1,9 +1,5 @@
-import {
-  SlashCommandBuilder,
-  ChatInputCommandInteraction,
-  SlashCommandStringOption,
-} from "discord.js";
-import { CustomCommand } from "bot-base";
+import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { CustomCommand, CustomSlashCommand } from "bot-base";
 import { TOILET_WINE_COLLECTION_COUNT } from "./../constants";
 import { getToiletWineStatus } from "../utils/get-toilet-wine-status";
 
@@ -68,8 +64,8 @@ const getToiletWineStatusCommand = new SlashCommandBuilder()
 
 /* Command Handler */
 
-const isToiletWineClaimed = async (
-  interaction: ChatInputCommandInteraction
+const isToiletWineClaimed: CustomSlashCommand["handler"] = async (
+  interaction
 ) => {
   const tokenIdsString =
     interaction.options.getString(MULTIPLE_IDS_INPUT_NAME) || null;

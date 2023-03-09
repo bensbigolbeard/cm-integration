@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import { CustomCommand, CustomSlashCommand } from "bot-base";
+import { CustomCommand, CustomSlashCommand } from "bot-utils";
 import { TOILET_WINE_COLLECTION_COUNT } from "./../constants";
 import { getToiletWineStatus } from "../utils/get-toilet-wine-status";
 

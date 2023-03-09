@@ -3,7 +3,7 @@ import {
   CustomCommand,
   CustomSlashCommand,
   CustomSlashCommandWithAutocomplete,
-} from "bot-base";
+} from "bot-utils";
 import { FAQs, CATEGORIES } from "../../faq-questions";
 
 /* Local Constants */

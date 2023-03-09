@@ -1,10 +1,6 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import {
-  CustomCommand,
-  CustomSlashCommand,
-  CustomSlashCommandWithAutocomplete,
-} from "bot-utils";
-import { FAQs, CATEGORIES } from "../../faq-questions";
+import { CustomCommand } from "bot-utils";
+import { FAQs } from "../../faq-questions";
 
 /* Local Constants */
 
@@ -31,13 +27,6 @@ const stringOption = (option: SlashCommandStringOption) =>
     .setName(FAQ_INPUT_NAME)
     .setDescription(FAQ_INPUT_DESCRIPTION)
     .setAutocomplete(true)
-    // .setChoices(
-    //   ...FAQs.map(({ name }) => ({
-    //     name,
-    //     value: name,
-    //   }))
-    // )
-
     .setRequired(true);
 
 const getFaqAnswerCommand = new SlashCommandBuilder()
@@ -48,32 +37,31 @@ const getFaqAnswerCommand = new SlashCommandBuilder()
 
 /* Command Handler */
 
-const faqAutocomplete: CustomSlashCommandWithAutocomplete["autocomplete"] =
-  async (interaction) => {
-    if (!interaction.isAutocomplete()) {
-      throw new Error("Invalid interaction type");
-    }
-    try {
-      const focusedValue = interaction.options.getFocused();
-      console.log("****focusedValue", focusedValue);
+const faqAutocomplete: CustomCommand["autocomplete"] = async (interaction) => {
+  if (!interaction.isAutocomplete()) {
+    throw new Error("Invalid interaction type");
+  }
+  try {
+    const focusedValue = interaction.options.getFocused();
+    console.log("****focusedValue", focusedValue);
 
-      const options = FAQs.map((q) => ({
-        ...q,
-        key: `${q.category}: ${q.name}`,
-      }));
-      const matches = options.filter(({ key }) =>
-        key.toLowerCase().includes(focusedValue.toLowerCase())
-      );
-      await interaction.respond(
-        matches.map(({ key, name }) => ({ name: key, value: name }))
-      );
-    } catch (e) {
-      console.error(e);
-      interaction.respond([{ name: "Error", value: (e as Error).toString() }]);
-    }
-  };
+    const options = FAQs.map((q) => ({
+      ...q,
+      key: `${q.category}: ${q.name}`,
+    }));
+    const matches = options.filter(({ key }) =>
+      key.toLowerCase().includes(focusedValue.toLowerCase())
+    );
+    await interaction.respond(
+      matches.map(({ key, name }) => ({ name: key, value: name }))
+    );
+  } catch (e) {
+    console.error(e);
+    interaction.respond([{ name: "Error", value: (e as Error).toString() }]);
+  }
+};
 
-const getFaqAnswers: CustomSlashCommand["handler"] = async (interaction) => {
+const getFaqAnswers: CustomCommand["handler"] = async (interaction) => {
   const faqOption = interaction.options.getString(FAQ_INPUT_NAME) || null;
   await interaction.deferReply();
 

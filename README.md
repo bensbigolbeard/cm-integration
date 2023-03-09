@@ -1,5 +1,5 @@
 # CM Integration
-This is a plugin implementation for the `bot-builder`. These are the current exported commands:
+This is a plugin implementation for [the `bot-builder`](https://github.com/bensbigolbeard/bot-builder). These are the current exported commands:
 
  - `/wtfaq` - returns answers for FAQ. includes discord autocomplete integration to handle large numbers of faqs
  - `/swipe_mugshot` - retrieves images and metadata by token ID

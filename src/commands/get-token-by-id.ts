@@ -3,7 +3,7 @@ import {
   CELMATES_COLLECTION_COUNT,
   CELMATES_OS_URL,
 } from "./../constants";
-import { pipe } from "froebel";
+import { pipe, batch, forward } from "froebel";
 import {
   AttachmentBuilder,
   bold,
@@ -42,23 +42,22 @@ type ParsedResponse = Record<string, string> & {
 
 const getFileName = (tokenId: number) => `celmate_${tokenId}.png`;
 const getAssetUrl = (tokenId: number) => `${COLLECTION_API_URL}/${tokenId}`;
-const formatTraits = (traits: Record<string, string>[]) =>
-  traits
-    .map(({ trait_type, value }) => `${bold(trait_type)}: ${value}`)
-    .sort()
-    .reduce(
-      (prev, next) => {
-        if (prev[prev.length - 1].length < 2) {
-          prev[prev.length - 1].push(next);
-        } else {
-          prev.push([]);
-        }
-        return prev;
-      },
-      [[]] as string[][]
-    )
-    .map((pair) => pair.join(", "))
-    .join("\n");
+
+const batchBy = (num: number) => forward(batch, num);
+function map<T, U>(fn: (x: T) => U): (list: T[]) => U[] {
+  return (arr) => arr.map(fn);
+}
+
+const formatTraits = pipe(
+  map(
+    ({ trait_type, value }: Record<string, string>) =>
+      `${bold(trait_type)}: ${value}`
+  ),
+  (arr: string[]) => arr.sort(),
+  batchBy(2),
+  map((pair) => (pair as string[][]).join(", ")), // need to resolve `batchBy` typing
+  (arr: string[]) => arr.join("\n")
+);
 
 const getRandomTokenId = () =>
   Math.floor(Math.random() * CELMATES_COLLECTION_COUNT) || 1;

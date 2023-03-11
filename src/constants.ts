@@ -1,3 +1,5 @@
+import path from "path";
+
 export const BASE_OPENSEA_COLLECTION_URL =
   "https://opensea.io/assets/ethereum/";
 const CANTEEN_BASE_URL = "https://canteen.celmates.wtf/";
@@ -13,3 +15,5 @@ export const CRIME_REPORTS_OS_URL =
   BASE_OPENSEA_COLLECTION_URL + CRIME_REPORTS_CONTRACT;
 export const TOILET_WINE_COLLECTION_COUNT = 2535;
 export const CELMATES_COLLECTION_COUNT = 4207;
+
+export const STATS_FILE_PATH = "stats.json";

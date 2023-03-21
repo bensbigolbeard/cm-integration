@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/isomorphic-fetch': ^0.0.36
   '@types/node': ^18.11.13
+  bensbigolbeard-bot-utils: ^1.0.0
   discord.js: ^14.7.1
   dotenv: ^16.0.3
   esbuild: ^0.16.4
@@ -16,6 +17,7 @@ specifiers:
 
 dependencies:
   '@types/isomorphic-fetch': 0.0.36
+  bensbigolbeard-bot-utils: 1.0.0
   discord.js: 14.7.1
   dotenv: 16.0.3
   fastify: 4.10.2
@@ -665,6 +667,20 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
+
+  /bensbigolbeard-bot-utils/1.0.0:
+    resolution: {integrity: sha512-VO640UGuvawSml8tingV28lQ25OFFkSlR3vi3lFyUSjjB8IlECaKNuZrb+L7H5wcd3wZjbSPJwB1M6P2/0xwpA==}
+    dependencies:
+      discord.js: 14.7.1
+      fastify: 4.10.2
+      froebel: 0.23.2
+      isomorphic-fetch: 3.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
     dev: false
 
   /binary-extensions/2.2.0:

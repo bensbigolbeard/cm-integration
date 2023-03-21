@@ -17,3 +17,4 @@ export const TOILET_WINE_COLLECTION_COUNT = 2535;
 export const CELMATES_COLLECTION_COUNT = 4207;
 
 export const STATS_FILE_PATH = "stats.json";
+export const TOILET_WINE_STATUS_FILE_PATH = "toilet-wine-status.json";

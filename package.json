@@ -1,6 +1,6 @@
 {
   "name": "bensbigolbeard-cm-discord-integration",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@types/isomorphic-fetch": "^0.0.36",
-    "bensbigolbeard-bot-utils": "^1.0.0",
+    "bensbigolbeard-bot-utils": "^1.0.4",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "fastify": "^4.10.2",

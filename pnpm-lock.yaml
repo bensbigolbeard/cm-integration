@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@types/isomorphic-fetch': ^0.0.36
   '@types/node': ^18.11.13
-  bensbigolbeard-bot-utils: ^1.0.0
+  bensbigolbeard-bot-utils: ^1.0.4
   discord.js: ^14.7.1
   dotenv: ^16.0.3
   esbuild: ^0.16.4
@@ -17,7 +17,7 @@ specifiers:
 
 dependencies:
   '@types/isomorphic-fetch': 0.0.36
-  bensbigolbeard-bot-utils: 1.0.0
+  bensbigolbeard-bot-utils: 1.0.4
   discord.js: 14.7.1
   dotenv: 16.0.3
   fastify: 4.10.2
@@ -669,8 +669,8 @@ packages:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
     dev: false
 
-  /bensbigolbeard-bot-utils/1.0.0:
-    resolution: {integrity: sha512-VO640UGuvawSml8tingV28lQ25OFFkSlR3vi3lFyUSjjB8IlECaKNuZrb+L7H5wcd3wZjbSPJwB1M6P2/0xwpA==}
+  /bensbigolbeard-bot-utils/1.0.4:
+    resolution: {integrity: sha512-TjwQoWX/uRE37qxdtg1UFfIDmashRmW5gNq6msPcu4Rz7KEKU4eFQRltRqq/PV6fbxeyjG5SUs1RaPFtLwrZiQ==}
     dependencies:
       discord.js: 14.7.1
       fastify: 4.10.2

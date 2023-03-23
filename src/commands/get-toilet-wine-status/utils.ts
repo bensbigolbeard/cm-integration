@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 import { access, constants, readFile, writeFile } from "node:fs/promises";
-import { ifElse } from "bot-utils";
+import { ifElse } from "bensbigolbeard-bot-utils";
 import {
   TOILET_WINE_CHECKER_URL,
   TOILET_WINE_CONTRACT,

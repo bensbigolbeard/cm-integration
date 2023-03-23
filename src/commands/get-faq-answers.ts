@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import { CustomCommand } from "bot-utils";
-import { FAQs } from "../../faq-questions";
+import { CustomCommand } from "bensbigolbeard-bot-utils";
+import { FAQs } from "../../faqs";
 
 /* Local Constants */
 
@@ -18,7 +18,7 @@ const ERROR_MESSAGE =
 /* Local Utils */
 
 const getAnswer = (faqOption: string) =>
-  FAQs.find(({ name }) => name === faqOption)?.value;
+  FAQs.find(({ question }) => question === faqOption)?.answer;
 
 /* Assemble Commands */
 
@@ -47,13 +47,13 @@ const faqAutocomplete: CustomCommand["autocomplete"] = async (interaction) => {
 
     const options = FAQs.map((q) => ({
       ...q,
-      key: `${q.category}: ${q.name}`,
+      key: `${q.category}: ${q.question}`,
     }));
     const matches = options.filter(({ key }) =>
       key.toLowerCase().includes(focusedValue.toLowerCase())
     );
     await interaction.respond(
-      matches.map(({ key, name }) => ({ name: key, value: name }))
+      matches.map(({ key, question }) => ({ name: key, value: question }))
     );
   } catch (e) {
     console.error(e);

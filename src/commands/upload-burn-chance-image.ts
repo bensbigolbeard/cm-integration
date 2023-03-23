@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
   SlashCommandAttachmentOption,
 } from "discord.js";
-import { CustomCommand } from "bot-utils";
+import { CustomCommand } from "bensbigolbeard-bot-utils";
 import { writeFile } from "node:fs/promises";
 import { STATS_FILE_PATH } from "../constants";
 
@@ -27,7 +27,7 @@ const EMBED_COLOR = 0x48dd00; // 1337 green
 
 /* Command Interaction Handler */
 
-const getById = async (interaction: ChatInputCommandInteraction) => {
+const uploadBurnChance = async (interaction: ChatInputCommandInteraction) => {
   await interaction.deferReply({ ephemeral: true });
 
   try {
@@ -67,7 +67,7 @@ const imageAttachmentOption = (option: SlashCommandAttachmentOption) =>
 
 /** Sub Command */
 
-const getByIdCommand = new SlashCommandBuilder()
+const uploadBurnChanceCommand = new SlashCommandBuilder()
   .setName(COMMAND_NAME)
   .setDescription(COMMAND_DESCRIPTION)
   .addAttachmentOption(imageAttachmentOption)
@@ -75,8 +75,8 @@ const getByIdCommand = new SlashCommandBuilder()
 
 const command: CustomCommand = {
   name: COMMAND_NAME,
-  command: getByIdCommand,
-  handler: getById,
+  command: uploadBurnChanceCommand,
+  handler: uploadBurnChance,
 };
 
 export default command;

@@ -14,7 +14,7 @@ import {
   SlashCommandIntegerOption,
   SlashCommandStringOption,
 } from "discord.js";
-import { CustomCommand, fetchTokenMeta } from "bot-utils";
+import { CustomCommand, fetchTokenMeta } from "bensbigolbeard-bot-utils";
 
 /* Local Constants */
 

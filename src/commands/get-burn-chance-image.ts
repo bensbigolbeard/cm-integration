@@ -1,6 +1,6 @@
 import { Attachment, EmbedBuilder, SlashCommandBuilder } from "discord.js";
 import { readFile, access, constants } from "node:fs/promises";
-import { CustomCommand } from "bot-utils";
+import { CustomCommand } from "bensbigolbeard-bot-utils";
 
 import { STATS_FILE_PATH } from "../constants";
 

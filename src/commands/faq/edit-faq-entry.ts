@@ -3,11 +3,9 @@ import { CustomCommand } from "bensbigolbeard-bot-utils";
 import { FAQs } from "../../../faqs.js";
 import {
   ANSWER_INPUT_NAME,
-  CATEGORY_INPUT_NAME,
   faqAutocomplete,
   QUESTION_INPUT_NAME,
   stringAnswerOption,
-  stringCategoryOption,
   stringQuestionOption,
   writeFaqFile,
 } from "./utils";
@@ -32,7 +30,7 @@ const editFaqAnswerCommand = new SlashCommandBuilder()
   .setDescription(COMMAND_DESCRIPTION)
   .addStringOption(stringQuestionOption)
   .addStringOption(stringAnswerOption)
-  .addStringOption(stringCategoryOption)
+
   .toJSON();
 
 /* Command Handler */
@@ -40,11 +38,11 @@ const editFaqAnswerCommand = new SlashCommandBuilder()
 const editFaqEntries: CustomCommand["handler"] = async (interaction) => {
   const question = interaction.options.getString(QUESTION_INPUT_NAME);
   const answer = interaction.options.getString(ANSWER_INPUT_NAME);
-  const category = interaction.options.getString(CATEGORY_INPUT_NAME);
+
   await interaction.deferReply();
 
   try {
-    if (!question || !answer || !category) {
+    if (!question || !answer) {
       throw new Error("some inputs were invalid");
     }
 
@@ -56,13 +54,13 @@ const editFaqEntries: CustomCommand["handler"] = async (interaction) => {
 
     const newFaq = [
       ...FAQs.slice(0, currentEntryIdx),
-      { question, answer, category },
+      { question: currentEntry.question, answer },
       ...FAQs.slice(currentEntryIdx + 1),
     ];
     await writeFaqFile(newFaq);
 
     await interaction.editReply({
-      content: `I roughed'em up a bit. Next time he'll know better.\n\n**${category} - ${question}**\n${answer}`,
+      content: `I roughed'em up a bit. Next time he'll know better.\n\n**${question}**\n${answer}`,
     });
 
     // trigger the bot to restart and read the new faq file

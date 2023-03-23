@@ -3,10 +3,8 @@ import { CustomCommand } from "bensbigolbeard-bot-utils";
 import { FAQs } from "../../../faqs.js";
 import {
   ANSWER_INPUT_NAME,
-  CATEGORY_INPUT_NAME,
   QUESTION_INPUT_NAME,
   stringAnswerOption,
-  stringCategoryOption,
   stringQuestionOption,
   writeFaqFile,
 } from "./utils";
@@ -23,6 +21,11 @@ const ERROR_MESSAGE =
 
 /* Local Utils */
 
+const getAnswer = (faqOption: string) =>
+  FAQs.find(({ question }) => question === faqOption);
+
+const sanitizeValue = (value: string) => value.replace("<", "");
+
 /* Assemble Commands */
 
 const getFaqAnswerCommand = new SlashCommandBuilder()
@@ -30,7 +33,6 @@ const getFaqAnswerCommand = new SlashCommandBuilder()
   .setDescription(COMMAND_DESCRIPTION)
   .addStringOption(stringQuestionOption)
   .addStringOption(stringAnswerOption)
-  .addStringOption(stringCategoryOption)
   .toJSON();
 
 /* Command Handler */
@@ -38,18 +40,29 @@ const getFaqAnswerCommand = new SlashCommandBuilder()
 const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
   const question = interaction.options.getString(QUESTION_INPUT_NAME);
   const answer = interaction.options.getString(ANSWER_INPUT_NAME);
-  const category = interaction.options.getString(CATEGORY_INPUT_NAME);
   await interaction.deferReply();
 
   try {
-    if (!question || !answer || !category) {
+    if (!question || !answer) {
       throw new Error("some inputs were invalid");
     }
-    const newFaq = FAQs.concat({ question, answer, category });
+    if (getAnswer(question)) {
+      console.log(new Error("That question already exists!"));
+
+      return await interaction.editReply({
+        content: `**Hey, wait a minute!** That question already exists!`,
+      });
+    }
+
+    const newFaqEntry = {
+      question: sanitizeValue(question),
+      answer: sanitizeValue(answer),
+    };
+    const newFaq = FAQs.concat(newFaqEntry);
     await writeFaqFile(newFaq);
 
     await interaction.editReply({
-      content: `**${category} - ${question}**\n${answer}`,
+      content: `**${newFaqEntry.question}**\n${newFaqEntry.answer}`,
     });
 
     // trigger the bot to restart and read the new faq file

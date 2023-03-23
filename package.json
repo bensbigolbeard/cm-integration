@@ -1,6 +1,6 @@
 {
   "name": "bensbigolbeard-cm-discord-integration",
-  "version": "1.0.3-alpha.3",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "types": "src/index.ts",
   "license": "MIT",

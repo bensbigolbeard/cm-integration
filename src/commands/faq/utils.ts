@@ -1,6 +1,6 @@
 import { pipe } from "froebel";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { CATEGORIES, FAQs } from "../../../faqs.js";
+import { FAQs } from "../../../faqs.js";
 import { writeFile } from "node:fs/promises";
 import { FAQ_FILE_PATH } from "../../constants";
 import { SlashCommandStringOption } from "discord.js";
@@ -8,15 +8,12 @@ import { SlashCommandStringOption } from "discord.js";
 export type FaqEntry = {
   question: string;
   answer: string;
-  category: string;
 };
 
 export const QUESTION_INPUT_NAME = "question";
 const QUESTION_INPUT_DESCRIPTION = "Enter your question.";
 export const ANSWER_INPUT_NAME = "answer";
 const ANSWER_INPUT_DESCRIPTION = "Enter your answer.";
-export const CATEGORY_INPUT_NAME = "category";
-const CATEGORY_INPUT_DESCRIPTION = "Select a category.";
 
 /* Common commands */
 export const stringQuestionOption = (option: SlashCommandStringOption) =>
@@ -32,12 +29,7 @@ export const stringAnswerOption = (option: SlashCommandStringOption) =>
     .setDescription(ANSWER_INPUT_DESCRIPTION)
     .setRequired(true);
 
-export const stringCategoryOption = (option: SlashCommandStringOption) =>
-  option
-    .setName(CATEGORY_INPUT_NAME)
-    .setDescription(CATEGORY_INPUT_DESCRIPTION)
-    .addChoices(...Object.keys(CATEGORIES).map((c) => ({ name: c, value: c })))
-    .setRequired(true);
+/* Common Utils */
 
 export const faqAutocomplete: CustomCommand["autocomplete"] = async (
   interaction
@@ -51,13 +43,13 @@ export const faqAutocomplete: CustomCommand["autocomplete"] = async (
 
     const options = FAQs.map((q) => ({
       ...q,
-      key: `${q.category}: ${q.question}`,
+      key: `${q.question}`,
     }));
     const matches = options.filter(({ key }) =>
       key.toLowerCase().includes(focusedValue.toLowerCase())
     );
     await interaction.respond(
-      matches.map(({ key, question }) => ({ name: key, value: question }))
+      matches.map(({ question }) => ({ name: question, value: question }))
     );
   } catch (e) {
     console.error(e);
@@ -67,12 +59,7 @@ export const faqAutocomplete: CustomCommand["autocomplete"] = async (
 
 export const generateUpdatedFaqFile = async (faqs: FaqEntry[]) => {
   const faqsString = JSON.stringify(faqs, null, 2);
-  const categoriesString = JSON.stringify(CATEGORIES, null, 2);
-  return `
-const CATEGORIES = ${categoriesString};
-const FAQs = ${faqsString};
-module.exports = { CATEGORIES, FAQs };
-`;
+  return `const FAQs = ${faqsString};\nmodule.exports = { FAQs };\n`;
 };
 
 export const writeFaqFile = pipe(generateUpdatedFaqFile, (file: string) =>

@@ -1,12 +1,11 @@
-import { FAQ_FILE_PATH } from "./../constants";
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs, CATEGORIES } from "../../faqs";
-import { readFile, writeFile } from "node:fs/promises";
+import { CATEGORIES, FAQs } from "../../../faqs.js";
+import { writeFaqFile } from "./utils";
 
 /* Local Constants */
 
-const COMMAND_NAME = "add_wtfaq_question";
+const COMMAND_NAME = "wtfaq_add_question";
 const COMMAND_DESCRIPTION =
   "Got a question to add? I'll add whatever you want. It could even be a lie. I don't give a fuck.";
 
@@ -62,21 +61,14 @@ const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
     if (!question || !answer || !category) {
       throw new Error("some inputs were invalid");
     }
-    const newFaq = {
-      question,
-      answer,
-      category,
-    };
-
-    const faqsString = JSON.stringify(FAQs.concat(newFaq), null, 2);
-    const categoriesString = JSON.stringify(CATEGORIES, null, 2);
-    const newFile = `const CATEGORIES = ${categoriesString};\nconst FAQs = ${faqsString};\nmodule.exports = { CATEGORIES, FAQs };\n`;
-    await writeFile(FAQ_FILE_PATH, newFile);
+    const newFaq = FAQs.concat({ question, answer, category });
+    await writeFaqFile(newFaq);
 
     await interaction.editReply({
       content: `**${category} - ${question}**\n${answer}`,
     });
-    // this is a hack to get the bot to restart
+
+    // trigger the bot to restart and read the new faq file
     process.exit(0);
   } catch (e) {
     console.error(e);

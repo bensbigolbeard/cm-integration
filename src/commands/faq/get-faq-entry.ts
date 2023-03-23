@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs } from "../../faqs";
+import { FAQs } from "../../../faqs";
+import { faqAutocomplete } from "./utils";
 
 /* Local Constants */
 
@@ -29,7 +30,7 @@ const stringOption = (option: SlashCommandStringOption) =>
     .setAutocomplete(true)
     .setRequired(true);
 
-const getFaqAnswerCommand = new SlashCommandBuilder()
+const getFaqEntryCommand = new SlashCommandBuilder()
   .setName(COMMAND_NAME)
   .setDescription(COMMAND_DESCRIPTION)
   .addStringOption(stringOption)
@@ -37,31 +38,7 @@ const getFaqAnswerCommand = new SlashCommandBuilder()
 
 /* Command Handler */
 
-const faqAutocomplete: CustomCommand["autocomplete"] = async (interaction) => {
-  if (!interaction.isAutocomplete()) {
-    throw new Error("Invalid interaction type");
-  }
-  try {
-    const focusedValue = interaction.options.getFocused();
-    console.log("****focusedValue", focusedValue);
-
-    const options = FAQs.map((q) => ({
-      ...q,
-      key: `${q.category}: ${q.question}`,
-    }));
-    const matches = options.filter(({ key }) =>
-      key.toLowerCase().includes(focusedValue.toLowerCase())
-    );
-    await interaction.respond(
-      matches.map(({ key, question }) => ({ name: key, value: question }))
-    );
-  } catch (e) {
-    console.error(e);
-    interaction.respond([{ name: "Error", value: (e as Error).toString() }]);
-  }
-};
-
-const getFaqAnswers: CustomCommand["handler"] = async (interaction) => {
+const getFaqEntry: CustomCommand["handler"] = async (interaction) => {
   const faqOption = interaction.options.getString(FAQ_INPUT_NAME) || null;
   await interaction.deferReply();
 
@@ -93,9 +70,9 @@ const getFaqAnswers: CustomCommand["handler"] = async (interaction) => {
 
 /* Assembled Command */
 const command: CustomCommand = {
-  command: getFaqAnswerCommand,
+  command: getFaqEntryCommand,
   name: COMMAND_NAME,
-  handler: getFaqAnswers,
+  handler: getFaqEntry,
   autocomplete: faqAutocomplete,
 };
 

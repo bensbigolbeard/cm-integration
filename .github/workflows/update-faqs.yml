@@ -1,0 +1,21 @@
+name: Update FAQs
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+jobs:
+  update-faqs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download FAQs
+        run: |
+          curl -s ${{ secrets.FAQ_ENDPOINT }}/api/wtfaqs > faqs.js
+      - name: Commit FAQs
+        if: ${{ success() }}
+        run: |
+          git config --local user.email "${{ secrets.GITHUB_EMAIL }}"
+          git config --local user.name "${{ secrets.GITHUB_USER }}"
+          git add .
+          git commit -m "Update FAQs" -a || true
+          git push

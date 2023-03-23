@@ -3,12 +3,41 @@ import { CustomCommand } from "bensbigolbeard-bot-utils";
 import { CATEGORIES, FAQs } from "../../../faqs.js";
 import { writeFile } from "node:fs/promises";
 import { FAQ_FILE_PATH } from "../../constants";
+import { SlashCommandStringOption } from "discord.js";
 
 export type FaqEntry = {
   question: string;
   answer: string;
   category: string;
 };
+
+export const QUESTION_INPUT_NAME = "question";
+const QUESTION_INPUT_DESCRIPTION = "Enter your question.";
+export const ANSWER_INPUT_NAME = "answer";
+const ANSWER_INPUT_DESCRIPTION = "Enter your answer.";
+export const CATEGORY_INPUT_NAME = "category";
+const CATEGORY_INPUT_DESCRIPTION = "Select a category.";
+
+/* Common commands */
+export const stringQuestionOption = (option: SlashCommandStringOption) =>
+  option
+    .setName(QUESTION_INPUT_NAME)
+    .setDescription(QUESTION_INPUT_DESCRIPTION)
+    .setAutocomplete(true)
+    .setRequired(true);
+
+export const stringAnswerOption = (option: SlashCommandStringOption) =>
+  option
+    .setName(ANSWER_INPUT_NAME)
+    .setDescription(ANSWER_INPUT_DESCRIPTION)
+    .setRequired(true);
+
+export const stringCategoryOption = (option: SlashCommandStringOption) =>
+  option
+    .setName(CATEGORY_INPUT_NAME)
+    .setDescription(CATEGORY_INPUT_DESCRIPTION)
+    .addChoices(...Object.keys(CATEGORIES).map((c) => ({ name: c, value: c })))
+    .setRequired(true);
 
 export const faqAutocomplete: CustomCommand["autocomplete"] = async (
   interaction

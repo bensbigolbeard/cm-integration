@@ -2,7 +2,9 @@
 This is a plugin implementation for [the `bot-builder`](https://github.com/bensbigolbeard/bot-builder). These are the current exported commands:
 
  - `/wtfaq` - returns answers for FAQ. includes discord autocomplete integration to handle large numbers of faqs
- - `/add_wtfaq_entry` - allows for adding new FAQ questions without the need for a redeploy
+ - `/wtfaq_add_question` - allows for adding new FAQ questions
+ - `/wtfaq_edit_question` - allows for selecting an existing entry with autocomplete, then editing it
+ - `/wtfaq_remove_question` - allows for selecting an existing entry with autocomplete, then removing it
  - `/swipe_mugshot` - retrieves images and metadata by token ID
  - `/did_ricardo_drink_my_wine` - returns redemption status of ToiletWine tokens
  - `/hang_most_wanted_poster` - upload new burn chances image

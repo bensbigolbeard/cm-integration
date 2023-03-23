@@ -4,6 +4,7 @@ import { FAQs } from "../../../faqs.js";
 import {
   ANSWER_INPUT_NAME,
   CATEGORY_INPUT_NAME,
+  faqAutocomplete,
   QUESTION_INPUT_NAME,
   stringAnswerOption,
   stringCategoryOption,
@@ -13,9 +14,9 @@ import {
 
 /* Local Constants */
 
-const COMMAND_NAME = "wtfaq_add_question";
+const COMMAND_NAME = "wtfaq_edit_question";
 const COMMAND_DESCRIPTION =
-  "Got a question to add? I'll add whatever you want. It could even be a lie. I don't give a fuck.";
+  "Is one of these faqs a fucking liar? Tell me which one and I'll set it straight.";
 
 const ERROR_MSG_COLOR = 0x880808; // red
 const ERROR_MESSAGE =
@@ -23,9 +24,10 @@ const ERROR_MESSAGE =
 
 /* Local Utils */
 
-/* Assemble Commands */
+const getAnswerIndex = (faqOption: string) =>
+  FAQs.findIndex(({ question }) => question === faqOption);
 
-const getFaqAnswerCommand = new SlashCommandBuilder()
+const editFaqAnswerCommand = new SlashCommandBuilder()
   .setName(COMMAND_NAME)
   .setDescription(COMMAND_DESCRIPTION)
   .addStringOption(stringQuestionOption)
@@ -35,7 +37,7 @@ const getFaqAnswerCommand = new SlashCommandBuilder()
 
 /* Command Handler */
 
-const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
+const editFaqEntries: CustomCommand["handler"] = async (interaction) => {
   const question = interaction.options.getString(QUESTION_INPUT_NAME);
   const answer = interaction.options.getString(ANSWER_INPUT_NAME);
   const category = interaction.options.getString(CATEGORY_INPUT_NAME);
@@ -45,11 +47,22 @@ const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
     if (!question || !answer || !category) {
       throw new Error("some inputs were invalid");
     }
-    const newFaq = FAQs.concat({ question, answer, category });
+
+    const currentEntryIdx = getAnswerIndex(question);
+    const currentEntry = FAQs[currentEntryIdx];
+    if (!currentEntry) {
+      throw new Error("the question doesn't seem to exist");
+    }
+
+    const newFaq = [
+      ...FAQs.slice(0, currentEntryIdx),
+      { question, answer, category },
+      ...FAQs.slice(currentEntryIdx + 1),
+    ];
     await writeFaqFile(newFaq);
 
     await interaction.editReply({
-      content: `**${category} - ${question}**\n${answer}`,
+      content: `I roughed'em up a bit. Next time he'll know better.\n\n**${category} - ${question}**\n${answer}`,
     });
 
     // trigger the bot to restart and read the new faq file
@@ -69,9 +82,10 @@ const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
 
 /* Assembled Command */
 const command: CustomCommand = {
-  command: getFaqAnswerCommand,
+  command: editFaqAnswerCommand,
   name: COMMAND_NAME,
-  handler: addFaqEntries,
+  handler: editFaqEntries,
+  autocomplete: faqAutocomplete,
 };
 
 export default command;

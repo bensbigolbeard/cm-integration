@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs } from "../../../faqs";
-import { faqAutocomplete, writeFaqFile } from "./utils";
+import FAQs from "../../../faqs.json";
+import { faqAutocomplete, getEntryIndex, writeFaqFile } from "./utils";
 
 /* Local Constants */
 
@@ -16,9 +16,6 @@ const ERROR_MSG_COLOR = 0x880808; // red
 const ERROR_MESSAGE = "Hmm, that didn't work. Maybe give it another go.";
 
 /* Local Utils */
-
-const getAnswerIndex = (faqOption: string) =>
-  FAQs.findIndex(({ question }) => question === faqOption);
 
 /* Assemble Commands */
 
@@ -46,7 +43,7 @@ const removeFaqEntry: CustomCommand["handler"] = async (interaction) => {
       throw new Error("no valid option provided");
     }
 
-    const answerIdx = getAnswerIndex(faqOption);
+    const answerIdx = getEntryIndex(faqOption);
     if (answerIdx === -1) {
       throw new Error("no valid answer found");
     }

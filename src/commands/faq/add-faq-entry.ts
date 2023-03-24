@@ -1,11 +1,11 @@
 import { SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs } from "../../../faqs.js";
+import FAQs from "../../../faqs.json";
 import {
   ANSWER_INPUT_NAME,
   QUESTION_INPUT_NAME,
   stringAnswerOption,
-  stringQuestionOption,
+  getStringQuestionOption,
   writeFaqFile,
 } from "./utils";
 
@@ -21,7 +21,7 @@ const ERROR_MESSAGE =
 
 /* Local Utils */
 
-const getAnswer = (faqOption: string) =>
+const getEntry = (faqOption: string) =>
   FAQs.find(({ question }) => question === faqOption);
 
 const sanitizeValue = (value: string) => value.replace("<", "");
@@ -31,7 +31,7 @@ const sanitizeValue = (value: string) => value.replace("<", "");
 const getFaqAnswerCommand = new SlashCommandBuilder()
   .setName(COMMAND_NAME)
   .setDescription(COMMAND_DESCRIPTION)
-  .addStringOption(stringQuestionOption)
+  .addStringOption(getStringQuestionOption(true))
   .addStringOption(stringAnswerOption)
   .toJSON();
 
@@ -46,7 +46,7 @@ const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
     if (!question || !answer) {
       throw new Error("some inputs were invalid");
     }
-    if (getAnswer(question)) {
+    if (getEntry(question)) {
       console.log(new Error("That question already exists!"));
 
       return await interaction.editReply({
@@ -62,7 +62,7 @@ const addFaqEntries: CustomCommand["handler"] = async (interaction) => {
     await writeFaqFile(newFaq);
 
     await interaction.editReply({
-      content: `**${newFaqEntry.question}**\n${newFaqEntry.answer}`,
+      content: `**${newFaqEntry.question}**\n\n${newFaqEntry.answer}`,
     });
 
     // trigger the bot to restart and read the new faq file

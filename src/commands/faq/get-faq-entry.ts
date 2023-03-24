@@ -1,16 +1,17 @@
-import { SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs } from "../../../faqs";
-import { faqAutocomplete } from "./utils";
+import FAQs from "../../../faqs.json";
+import {
+  faqAutocomplete,
+  getStringQuestionOption,
+  QUESTION_INPUT_NAME,
+} from "./utils";
 
 /* Local Constants */
 
 const COMMAND_NAME = "wtfaq";
 const COMMAND_DESCRIPTION =
   "Got a question? For a pack of smokes, I'll tell ya whatever you need.";
-
-const FAQ_INPUT_NAME = "question";
-const FAQ_INPUT_DESCRIPTION = "Select your question.";
 
 const ERROR_MSG_COLOR = 0x880808; // red
 const ERROR_MESSAGE =
@@ -23,23 +24,16 @@ const getAnswer = (faqOption: string) =>
 
 /* Assemble Commands */
 
-const stringOption = (option: SlashCommandStringOption) =>
-  option
-    .setName(FAQ_INPUT_NAME)
-    .setDescription(FAQ_INPUT_DESCRIPTION)
-    .setAutocomplete(true)
-    .setRequired(true);
-
 const getFaqEntryCommand = new SlashCommandBuilder()
   .setName(COMMAND_NAME)
   .setDescription(COMMAND_DESCRIPTION)
-  .addStringOption(stringOption)
+  .addStringOption(getStringQuestionOption())
   .toJSON();
 
 /* Command Handler */
 
 const getFaqEntry: CustomCommand["handler"] = async (interaction) => {
-  const faqOption = interaction.options.getString(FAQ_INPUT_NAME) || null;
+  const faqOption = interaction.options.getString(QUESTION_INPUT_NAME) || null;
   await interaction.deferReply();
 
   try {
@@ -53,7 +47,7 @@ const getFaqEntry: CustomCommand["handler"] = async (interaction) => {
     }
 
     interaction.editReply({
-      content: `**${faqOption}**\n${answer}`,
+      content: `**${faqOption}**\n\n${answer}`,
     });
   } catch (e) {
     console.error(e);

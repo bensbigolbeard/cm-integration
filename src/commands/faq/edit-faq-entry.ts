@@ -1,13 +1,14 @@
 import { SlashCommandBuilder } from "discord.js";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs } from "../../../faqs.js";
+import FAQs from "../../../faqs.json";
 import {
   ANSWER_INPUT_NAME,
   faqAutocomplete,
   QUESTION_INPUT_NAME,
   stringAnswerOption,
-  stringQuestionOption,
+  getStringQuestionOption,
   writeFaqFile,
+  getEntryIndex,
 } from "./utils";
 
 /* Local Constants */
@@ -22,15 +23,13 @@ const ERROR_MESSAGE =
 
 /* Local Utils */
 
-const getAnswerIndex = (faqOption: string) =>
-  FAQs.findIndex(({ question }) => question === faqOption);
+/* Assemble Commands */
 
 const editFaqAnswerCommand = new SlashCommandBuilder()
   .setName(COMMAND_NAME)
   .setDescription(COMMAND_DESCRIPTION)
-  .addStringOption(stringQuestionOption)
+  .addStringOption(getStringQuestionOption())
   .addStringOption(stringAnswerOption)
-
   .toJSON();
 
 /* Command Handler */
@@ -46,7 +45,7 @@ const editFaqEntries: CustomCommand["handler"] = async (interaction) => {
       throw new Error("some inputs were invalid");
     }
 
-    const currentEntryIdx = getAnswerIndex(question);
+    const currentEntryIdx = getEntryIndex(question);
     const currentEntry = FAQs[currentEntryIdx];
     if (!currentEntry) {
       throw new Error("the question doesn't seem to exist");

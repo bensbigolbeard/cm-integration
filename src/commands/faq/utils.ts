@@ -1,6 +1,5 @@
-import { pipe } from "froebel";
 import { CustomCommand } from "bensbigolbeard-bot-utils";
-import { FAQs } from "../../../faqs.js";
+import FAQs from "../../../faqs.json";
 import { writeFile } from "node:fs/promises";
 import { FAQ_FILE_PATH } from "../../constants";
 import { SlashCommandStringOption } from "discord.js";
@@ -16,12 +15,15 @@ export const ANSWER_INPUT_NAME = "answer";
 const ANSWER_INPUT_DESCRIPTION = "Enter your answer.";
 
 /* Common commands */
-export const stringQuestionOption = (option: SlashCommandStringOption) =>
-  option
-    .setName(QUESTION_INPUT_NAME)
-    .setDescription(QUESTION_INPUT_DESCRIPTION)
-    .setAutocomplete(true)
-    .setRequired(true);
+
+export const getStringQuestionOption =
+  (disableAutocomplete = false) =>
+  (option: SlashCommandStringOption) =>
+    option
+      .setName(QUESTION_INPUT_NAME)
+      .setDescription(QUESTION_INPUT_DESCRIPTION)
+      .setAutocomplete(!disableAutocomplete)
+      .setRequired(true);
 
 export const stringAnswerOption = (option: SlashCommandStringOption) =>
   option
@@ -57,11 +59,8 @@ export const faqAutocomplete: CustomCommand["autocomplete"] = async (
   }
 };
 
-export const generateUpdatedFaqFile = async (faqs: FaqEntry[]) => {
-  const faqsString = JSON.stringify(faqs, null, 2);
-  return `const FAQs = ${faqsString};\nmodule.exports = { FAQs };\n`;
-};
+export const writeFaqFile = (faqs: typeof FAQs) =>
+  writeFile(FAQ_FILE_PATH, JSON.stringify(faqs, null, 2));
 
-export const writeFaqFile = pipe(generateUpdatedFaqFile, (file: string) =>
-  writeFile(FAQ_FILE_PATH, file)
-);
+export const getEntryIndex = (faqOption: string) =>
+  FAQs.findIndex(({ question }) => question === faqOption);

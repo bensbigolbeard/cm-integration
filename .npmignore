@@ -1,0 +1,8 @@
+.env
+.github
+credentials.json
+tokenGDrive.json
+
+cert/
+certs/
+stats.json
